@@ -1,0 +1,88 @@
+dataset_class: feedback_ds
+model_class: feedback_model
+experiment_name: exp01
+output_dir: ../data/pseudolabels
+debug: false
+architecture:
+    reinit_n_layers: 0
+    mixout: 0.0
+    pretrained_weights: "" # output/exp7/microsoft-deberta-v3-base/  #output/exp11/microsoft-deberta-v3-base/
+    model_name: microsoft/deberta-v3-base  #microsoft/deberta-v3-base # kitkeat/deberta-v3-base-argumentativewriting # 
+    custom_intermediate_dropout: true
+    dropout: 0
+    gradient_checkpointing: true
+    intermediate_dropout: 0.0
+    # pool: All [CLS] token
+    pool: Mean # GeM # WLP # Mean
+    use_sep: false
+    use_type: false
+    wide_dropout: 0
+dataset:
+    use_pl: false
+    pretrain_pl: false
+    preprocess: false
+    add_group_types: false
+    fold: 0
+    group_discourse: false
+    target_cols:
+    - cohesion
+    - syntax
+    - vocabulary
+    - phraseology
+    - grammar
+    - conventions
+    separator: ''
+    text_column:
+    - full_text
+    train_dataframe: ../data/train_5folds.csv
+    comp_train_dataframe: ../data/train.csv
+    base_dir: ../data
+    num_folds: 5
+    max_len: 768  #1428
+environment:
+    mixed_precision: true
+    num_workers: 4
+    seed: 42
+training:
+    mask_probability: 0
+    # aux_loss_function: CrossEntropy
+    save_oofs: true
+    batch_size: 4 # 6 better
+    val_batch_size: 4
+    differential_learning_rate: 5.0e-4
+    differential_learning_rate_layers:
+    - head
+    drop_last_batch: true
+    epoch_subsample: 0.5
+    epochs: 4
+    # grad_accumulation: 9
+    print_freq: 50
+    batch_scheduler: true
+    grad_accumulation: 1
+    gradient_clip: 0
+    learning_rate: 2.0e-5 # 2.0e-5
+    loss_function: smooth_l1 #smooth_l1 # smooth_l1 | rmse | mse
+    mixup_concentration: 1
+    mixup_probability: 0
+    optimizer: AdamW
+    train_validation_data: true
+    warmup_epochs: 0
+    weight_decay: 0
+    max_grad_norm: 1000
+    layer_start: 9
+scheduler:
+    schedule: cosine # linear
+    num_cycles: 0.5
+optimizer:
+    llrd: false
+    encoder_lr: 2.0e-5
+    decoder_lr: 2.0e-5
+    weight_decay: 1.0e-8
+    eps: 1.0e-6
+wandb: 
+    enable: false
+    project_name: fb3-exps
+awp:
+    enable: true
+    start_epoch: 2
+

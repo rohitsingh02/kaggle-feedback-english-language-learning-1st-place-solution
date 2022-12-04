@@ -1,0 +1,151 @@
+
+logging:
+    use_wandb: True
+
+    wandb:
+        project: 'feedback3'
+        group: 'general'
+
+
+general:
+    
+    use_current_data_true_labels: False
+    use_previous_data_pseudo_labels: True
+    use_current_data_pseudo_labels: False
+
+    current_data_pseudo_version: ''
+    previous_data_pseudo_version: 'ensemble_4448_pseudolabels'
+
+    check_cv_on_all_data: False
+
+    n_workers: 4
+
+    train_print_frequency: 100
+    valid_print_frequency: 50
+
+    train_batch_size: 3
+    valid_batch_size: 3
+
+    seed: 42
+
+    target_columns: ['cohesion', 'syntax', 'vocabulary', 'phraseology', 'grammar', 'conventions']
+    n_folds: 5
+
+    max_length: 1024
+    set_max_length_from_data: True
+
+model:
+    backbone_type: 'microsoft/deberta-v3-base'
+    pretrained_backbone: True
+    from_checkpoint: False
+    checkpoint_id: ''
+
+    backbone_config_path: ''
+    backbone_hidden_dropout: 0.
+    backbone_hidden_dropout_prob: 0.
+    backbone_attention_dropout: 0.
+    backbone_attention_probs_dropout_prob: 0.
+
+    pooling_type: 'MeanPooling' # ['MeanPooling', 'ConcatPooling', 'WeightedLayerPooling', 'GRUPooling', 'LSTMPooling', 'AttentionPooling']
+
+    gru_pooling:
+        hidden_size: 1024
+        dropout_rate: 0.1
+        bidirectional: False
+
+    weighted_pooling:
+        layer_start: 8
+        layer_weights: null
+
+    wk_pooling:
+        layer_start: 4
+        context_window_size: 2
+
+    lstm_pooling:
+        hidden_size: 1024
+        dropout_rate: 0.1
+        bidirectional: False
+        
+    attention_pooling:
+        hiddendim_fc: 1024
+        dropout: 0.1
+        
+    concat_pooling:
+        n_layers: 4
+
+    gradient_checkpointing: True
+
+    freeze_embeddings: False
+    freeze_n_layers: 0
+    reinitialize_n_layers: 1
+
+
+optimizer:
+    use_swa: False
+    
+    swa:
+        swa_start: 10
+        swa_freq: 10
+        swa_lr: 0.0005
+
+    encoder_lr: 0.00001
+    embeddings_lr: 0.000009
+    decoder_lr: 0.00003
+
+    group_lt_multiplier: 1
+    n_groups: 1
+
+    eps: 1.e-6
+    betas: [0.9, 0.999]
+
+    weight_decay: 0.01
+
+scheduler:
+    scheduler_type: 'cosine_schedule_with_warmup' # [constant_schedule_with_warmup, linear_schedule_with_warmup, cosine_schedule_with_warmup,polynomial_decay_schedule_with_warmup]
+    batch_scheduler: True
+
+    constant_schedule_with_warmup:
+        n_warmup_steps: 0
+
+    linear_schedule_with_warmup:
+        n_warmup_steps: 0
+
+    cosine_schedule_with_warmup:
+        n_cycles: 0.5
+        n_warmup_steps: 0
+
+    polynomial_decay_schedule_with_warmup:
+        n_warmup_steps: 0
+        power: 1.0
+        min_lr: 0.0
+
+adversarial_learning:
+    adversarial_lr: 0.00001
+    adversarial_eps: 0.001
+    adversarial_epoch_start: 2
+
+training:
+    epochs: 3
+    apex: True
+    gradient_accumulation_steps: 1
+    evaluate_n_times_per_epoch: 2
+    max_grad_norm: 1000
+    unscale: False
+
+    
+criterion:
+    criterion_type: 'MSELoss' # ['SmoothL1Loss', 'MSELoss', 'RMSELoss', 'MCRMSELoss',]
+
+    smooth_l1_loss:
+        beta: 0.1
+        reduction: 'mean'
+
+    mse_loss:
+        reduction: 'mean'
+
+    rmse_loss:
+        eps: 1.e-9
+        reduction: 'mean'
+
+    mcrmse_loss:
+        weights: [0.2, 0.2, 0.2, 0.2, 0.2]

@@ -1,0 +1,10 @@
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp1.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp2.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp3.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp4.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp5.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp6.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp7.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp8.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp9.yaml
+CUDA_VISIBLE_DEVICES=1 python train.py -C yaml_pl/exp10.yaml
